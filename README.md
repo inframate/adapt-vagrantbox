@@ -6,6 +6,7 @@ a powershell script to adapt a centOS vagrantbox and push it to the local vagran
     - setup timezone
     - SET SWAPPINESS TO 0 TO USE RAM RATHER THAN SWAP
 - Start a VM with the old vagrant Box
-- stop the new VM
+- If you have the vagrant plugin for Virtualbox guest additions they will be installed/updated
+- Stop the new VM
 - Package the new VM into a new box and add it to vagrant local boxes
 - cleanup
