@@ -6,7 +6,7 @@ echo "# -*- mode: ruby -*-" > vagrantfile
 echo "# vi: set ft=ruby :" >> vagrantfile
 echo "Vagrant.configure(""2"") do |config|" >> vagrantfile
  
-echo "  config.vm.box = ""mesosphere/dcos-centos-virtualbox""" >> vagrantfile
+echo "  config.vm.box = ""centos""" >> vagrantfile
 # provision a shared SSH key
 echo "  config.ssh.insert_key = false" >> vagrantfile
 echo "  config.ssh.private_key_path = [""~/.ssh/id_rsa"",  ""~/.vagrant.d/insecure_private_key""]" >> vagrantfile
@@ -29,7 +29,7 @@ vagrant up
 vagrant halt
 
 # Package the new VM
-vagrant package --output dcos-centos-virtualbox.box --vagrantfile vagrantfile
-vagrant box add .\dcos-centos-virtualbox.box --name mesosphere/dcos-centos-virtualbox  --provider virtualbox
+vagrant package --output centos.box --vagrantfile vagrantfile
+vagrant box add .\centos.box --name mesosphere/dcos-centos-virtualbox  --provider virtualbox
 vagrant destroy -f
 rm .\dcos-centos-virtualbox.box
