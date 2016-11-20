@@ -1,7 +1,4 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-# create vagrantfile
+# creae vagrantfile
 echo "# -*- mode: ruby -*-" > vagrantfile
 echo "# vi: set ft=ruby :" >> vagrantfile
 echo "Vagrant.configure(""2"") do |config|" >> vagrantfile
