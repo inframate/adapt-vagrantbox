@@ -1,33 +1,28 @@
-# creae vagrantfile
-echo "# -*- mode: ruby -*-" > vagrantfile
-echo "# vi: set ft=ruby :" >> vagrantfile
-echo "Vagrant.configure(""2"") do |config|" >> vagrantfile
- 
-echo "  config.vm.box = ""centos""" >> vagrantfile
-# provision a shared SSH key
-echo "  config.ssh.insert_key = false" >> vagrantfile
-echo "  config.ssh.private_key_path = [""~/.ssh/id_rsa"",  ""~/.vagrant.d/insecure_private_key""]" >> vagrantfile
-echo "  config.vm.provision ""file"", source: ""~/.ssh/id_rsa.pub"", destination: ""~/.ssh/authorized_keys""" >> vagrantfile
-echo "  config.vm.provision ""shell"", inline: <<-SHELL" >> vagrantfile
-echo "    sudo yum -y update" >> vagrantfile
-echo "    sudo timedatectl set-timezone EST" >> vagrantfile
-# SET SWAPPINESS TO 0 TO USE RAM RATHER THAN SWAP
-echo "    sudo sysctl vm.swappiness=0" >> vagrantfile
-echo "    echo ""vm.swappiness=0"" | sudo tee --append /etc/sysctl.conf" >> vagrantfile
-echo "  SHELL" >> vagrantfile
-#Here you can add any provionning shell command or script
-#echo "	config.vm.provision :shell, path: ""Provision-script.sh""" >> vagrantfile
-
-echo "  end" >> vagrantfile
-echo "end" >> vagrantfile	
+$Vagrantbox =  "simo/CentOS7-Zabbix3_2-All"
+$Vagrantboxfile = "CentOS7-Zabbix3_2-All.box"
+$Vagrantfile= "vagrantfile"
+$provider="virtualbox"
+$error.clear()
 # Start the old vagrant Box
+echo "vagrant up"
 vagrant up
-
 # stop the new VM
+echo "vagrant halt"
 vagrant halt
-
-# Package the new VM
-vagrant package --output centos.box --vagrantfile vagrantfile
-vagrant box add .\centos.box --name mesosphere/dcos-centos-virtualbox  --provider virtualbox
-vagrant destroy -f
-rm .\dcos-centos-virtualbox.box
+if ($?) {
+	# Package the new VM into a new box, add it to vagrant local boxes and then clean up all
+	echo "Packaging..."
+	vagrant package --output $Vagrantboxfile 
+	if ($?) {
+		echo "Adding Box $Vagrantbox ..."
+		vagrant box add $Vagrantboxfile --name $Vagrantbox --force --provider $provider
+		if ($?) {
+			echo "Destroying the VM..."
+			vagrant destroy -f
+			if ($?) {
+				echo "Removing $Vagrantboxfile ..."
+				rm $Vagrantboxfile
+			}
+		}
+	}
+}
