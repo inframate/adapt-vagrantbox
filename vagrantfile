@@ -3,6 +3,9 @@
 $script = <<SCRIPT
 #!/bin/sh
 echo "running script in the VM"
+#correct /etc/hosts
+sleep 1 | echo -e "\nCorrecting /etc/hosts file...\n"; echo -e "\nCorrecting /etc/hosts file...\n" 
+sed -ri 's/127\.0\.0\.1\s.*/127.0.0.1 localhost localhost.localdomain/' /etc/hosts
 timedatectl set-timezone EST
 sysctl vm.swappiness=0
 echo "vm.swappiness=0" | tee --append /etc/sysctl.conf
